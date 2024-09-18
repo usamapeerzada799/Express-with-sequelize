@@ -1,37 +1,34 @@
-const Todo = require("../models/todo");
+const Test = require("../models/test");
 // Controller method to get all todos
-exports.getAllTodos = async (req, res) => {
+exports.getAllTest = async (req, res) => {
   try {
-    const todos = await Todo.findAll();
-    res.json(todos);
+    const tests = await Test.findAll();
+    res.json(tests);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
 // Controller method to create a new todo
-exports.createTodo = async (req, res) => {
-  const { task, createdDate, percentCompleted, isCompleted } = req.body;
+exports.createTest = async (req, res) => {
+  const { name } = req.body;
   try {
-    const newTodo = await Todo.create({
-      task: task,
-      createdDate,
-      percentCompleted,
-      isCompleted,
+    const newTest = await Test.create({
+      name,
     });
-    res.status(201).json(newTodo);
+    res.status(201).json(newTest);
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
 // Controller method to get a todo by ID
-exports.getTodoById = async (req, res) => {
+exports.getTestById = async (req, res) => {
   const id = req.params.id;
   try {
-    const todo = await Todo.findByPk(id);
-    if (todo) {
-      res.json(todo);
+    const test = await Test.findByPk(id);
+    if (test) {
+      res.json(test);
     } else {
       res.status(404).json({ error: "Todo not found" });
     }
@@ -40,18 +37,16 @@ exports.getTodoById = async (req, res) => {
   }
 };
 // Controller method to update a todo by ID
-exports.updateTodo = async (req, res) => {
+exports.updateTest = async (req, res) => {
   const id = req.params.id;
-  const { task, createdDate, percentCompleted, isCompleted } = req.body;
+  const { name } = req.body;
   try {
-    const todo = await Todo.findByPk(id);
-    if (todo) {
-      todo.task = task;
-      todo.createdDate = createdDate;
-      todo.percentCompleted = percentCompleted;
-      todo.isCompleted = isCompleted;
-      await todo.save();
-      res.json(todo);
+    const test = await Test.findByPk(id);
+    if (test) {
+      test.name = name;
+
+      await test.save();
+      res.json(test);
     } else {
       res.status(404).json({ error: "Todo not found" });
     }
@@ -60,13 +55,13 @@ exports.updateTodo = async (req, res) => {
   }
 };
 // Controller method to delete a todo by ID
-exports.deleteTodo = async (req, res) => {
+exports.deleteTest = async (req, res) => {
   const id = req.params.id;
   try {
-    const todo = await Todo.findByPk(id);
-    if (todo) {
-      await todo.destroy();
-      res.json(todo);
+    const test = await Test.findByPk(id);
+    if (test) {
+      await test.destroy();
+      res.json(test);
     } else {
       res.status(404).json({ error: "Todo not found" });
     }
